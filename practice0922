@@ -1,0 +1,185 @@
+순열/조합에 대해 공부하는 시간을 가질것이다.
+고등학교 때 했던 기억을 더듬어보자면... 순열은 순서가 있는 집합이고 조합은 순서없는 집합이었던 것 같다.
+이것을 알고리즘으로 어떻게 가져올 것인가... 공부 이전에 생각을 좀 해봐야겠다
+
+첫 번째 생각나는 방법. list내에서 반복문을 돌리면서 값을 뽑아 한 묶음씩 묶어서 조합배열에 넣는 것이다. 
+check 배열 써서 이미 check된 값은 못 가져오게 하면 되지않을까.. 값을 다시 뽑을 때에는 check배열을 초기화해주고
+
+
+아래는 https://aerocode.net/376 을 참고하여 공부한 내용이다.
+
+
+순열(Permutation):
+길이가 n인 배열에서 r개의 요소를 차례대로 뽑아 새로운 배열을 만들었을 때, 가능한 모든 배열의 합입니다. 
+예를 들어 [1, 2, 3, 4]라는 배열에서 3개의 요소를 뽑아 새로운 배열을 만든다고 한다면, 24개의 배열이 도출됩니다.
+
+구현
+
+◆ 가장 간단한 방법은 for반복문을 r번 중첩하는 것 입니다. 이 때, 반복문에 의해 선택된 i, j, k가 모두 다른값을 가르키도록 강제해야 합니다.
+
+arr = [1,2,3,4] //주어진 배열
+ans = [] //순열이 저장될 배열
+for i in range(len(arr)):
+    for j in range(len(arr)):
+        for k in range(len(arr)):
+            //중복배제
+            if i == j or i == k or j == k : continue
+            current = [arr[i],arr[j],arr[k]]
+            ans.append(current)
+
+
+
+◆ i, j, k의 중복을 배제하는 또 다른 아이디어는, 다음과 같이 boolean[]을 사용하는 것 입니다.
+
+arr = [1,2,3,4] // 주어진 배열
+ans = [] // 순열이 저장될 배열
+isUsed =[False for _ in range(len(arr))] //이미 뽑아낸 수인지 아닌지를 체크하기 위한 용도
+
+for i in range(len(arr)):
+    if isUsed[i] == True : continue
+    isUsed[i] = True
+
+    for j in range(len(arr)):
+        if isUsed[j] == True : continue
+        isUsed[j] = True
+
+        for k iUsed[k] = Truen range(len(arr)):
+            if isUsed[k] == True : continue
+            isUsed[k] = True
+
+            current = [arr[i], arr[j], arr[k]]
+            ans.append(current)
+            isUsed[k] = False //다 뽑았으니 초기화.
+
+        isUsed[j] = False //다 뽑았으니 초기화.
+    
+    isUsed[i] = False //다 뽑았으니 초기화.
+
+
+
+◆ 재귀로 구현
+    for문을 사용한 구현은 간단하지만 r이 작은 경우에만 유효합니다. r이 커지면 커질수록 일일이 적어야 하는 코드의 량이 늘어나기 때문이죠. 
+    이런 경우, 재귀함수를 사용하면 유연하게 대처할 수 있습니다.
+
+def getPermutation(arr,r,tmp,ans,isUsed): // arr: 주어진 배열 r: 뽑는 개수 tmp: 순열 중 하나를 임시로 저장할 배열 ans: 순열이 저장될 배열
+    // 순열 중 하나가 완성된 경우.
+    if len(tmp) == r:
+        ans.push(tmp)
+        return ans;
+    //뽑을것이 남아있으면 for문을 돈다.
+    for i in range(len(arr)):
+        //i가 이미 사용됐다면 건너뜀
+        if isUsed[i] == True : continue
+        
+        //i가 사용되지 않은 경우 사용할 것이므로 isUsed에 True값 부여.
+        isUsed[i] = True
+        tmp.append(arr[i])
+        //tmp에 arr[i]를 추가하고 getPermutation함수를 다시 불러와 재귀 돎
+        getPermutation(arr,r,tmp,ans,isUsed)
+        //행위가 끝난 경우 tmp를 비워주고 isUsed도 초기화 시켜준다.
+        tmp.pop()
+        isUsed[i] = False
+
+    return ans
+
+permutation = getPermutation([1,2,3,4],3) // permutation 변수에 값이 저장된다.
+
+
+
+◆ 추가적으로 tmp에 포함된 원소는 이미 사용되었다는 것을 이해했다면 isUsed를 제거할 수 있습니다. (단, Set을 이용한 구현법이 조금 더 빠릅니다.)
+
+def getPermutation(arr,r,tmp,ans):
+// 순열 중 하나가 완성된 경우.
+    if len(tmp) == r:
+        ans.append(tmp)
+        return ans
+
+    for i in range(len(arr)):
+        if arr[i] in temp: continue
+        tmp.append(arr[i])
+        getPermutation(arr,r,tmp,ans)
+        tmp.pop()
+
+    return ans
+
+
+// [1, 2, 3, 4] 에서 3개를 선택.
+permutation = getPermutation([1, 2, 3, 4], 3)
+
+
+
+
+조합(Combination)
+:직관적으로 설명하자면 순서가 중요하지 않은 순열입니다. 
+예를 들어, 아래의 배열들은 순열로 바라봤을 때는 Not Equal이지만, 조합으로 봤을 때는 Equal입니다.
+[1, 2, 3]
+[1, 3, 2]
+[2, 1, 3]
+[2, 3, 1]
+[3, 1, 2]
+[3, 2, 1]
+
+따라서 [1, 2, 3, 4]에서 3개를 선택하는 조합은 다음과 같이 4개밖에 없습니다.
+[
+    [1, 2, 3],
+    [1, 2, 4],
+    [1, 3, 4],
+    [2, 3, 4],
+]
+
+
+구현
+◆ 순열과 마찬가지로 for반복문을 r번 반복하여 구현할 수 있습니다. [1, 2, 3, 4]에서 3개를 선택하는 조합을 계산해보겠습니다.
+
+arr = [1,2,3,4]
+ans = [] //조합이 저장될 배열
+for i in(len(arr)):
+    for j in(i+1,len(arr)): // 다시 0 부터 시작하는게 아니고 i+1부터 시작한다.
+        for k in(j+1,len(arr)): // 다시 0 부터 시작하는게 아니고 j+1부터 시작한다.
+            ans.push([arr[i], arr[j], arr[k]])
+
+순열과 다른 점은 j = i + 1 , k = j + 1로 초기화되는 것입니다. 우리는 조합의 결과를 오름차순으로 강제했으므로 
+[i=0, j=2, k=1]과 같은 경우를 방지하기 위해, 직전 반복문에서 사용한 다음 요소부터 사용해야 합니다.
+
+
+
+◆ 재귀로 구현
+순열과 마찬가지로 재귀를 사용하여 r이 큰 경우에도 유연하게 대처할 수 있습니다. 순열과 다른점은, 우리가 설정한 강제사항으로 인해 매 인덱스는
+오름차순으로 정렬되어 있어야 하므로, 마지막에 선택한 인덱스보다 낮은 인덱스를 사용할 수 없다는 것 입니다. 따라서 isUsed는 필요하지 않습니다.
+function getCombination(
+    arr : number[],
+    r   : number,
+    tmp : number[]   = [], // 조합 중 하나를 임시로 저장할 배열
+    ans : number[][] = [], // 조합이 저장될 배열
+) {
+    // 조합 중 하나가 완성된 경우.
+    if( tmp.length === r ) {
+         ans.push(tmp);
+         return ans;
+    }
+    // 마지막으로 사용한 요소의 다음 것 부터 사용한다.
+    const lastIndex = tmp.length === 0 ? -1 : tmp[tmp.length-1]; 
+    for(let i=lastIndex+1; i<arr.length; i++) {
+        tmp.push(arr[i]);
+        getCombination(arr, r, tmp, ans);
+        tmp.pop();
+    }
+    return ans;
+}
+//
+// [1, 2, 3, 4] 에서 3개를 선택.
+const combination = getCombination([1, 2, 3, 4], 3); 
+
+def getCombination(arr,r,tmp,ans):
+    // 조합 중 하나가 완성된 경우.
+    if len(tmp) == r :
+        ans.append(tmp)
+        return ans
+    // 마지막으로 사용한 요소의 다음 것 부터 사용한다.
+    lastIndex = len(tmp) == 0 ? -1 : tmp[len(tmp)-1]
+    for i in range(lastIndex + 1, len(arr)):
+        tmp.append(arr[i])
+        getCombination(arr,r,tmp,ans)
+        tmp.pop()
+        
+    return ans
