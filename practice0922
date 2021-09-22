@@ -181,5 +181,6 @@ def getCombination(arr,r,tmp,ans):
         tmp.append(arr[i])
         getCombination(arr,r,tmp,ans)
         tmp.pop()
-        
+
     return ans
+    
