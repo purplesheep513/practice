@@ -25,7 +25,7 @@ def bfs():
                     visit[nx][ny][0] = visit[x][y][1] + 1
                     queue.append((nx,ny,0))
                 elif graph[nx][ny]== "0" and visit[nx][ny][w]==0:
-                    visit[nx][ny][w] == visit[x][y][w] + 1
+                    visit[nx][ny][w] = visit[x][y][w] + 1
                     queue.append((nx,ny,w))
         return -1
 
