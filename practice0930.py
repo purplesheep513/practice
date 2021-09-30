@@ -5,15 +5,18 @@ def solution(begin, target, words):
     cnt = 0
     if target not in words:
         return 0
-    for i in range(len(words)):
-        print(words[i])
-        # for j in list(words[i]).sort():
-        #     for k in list(begin).sort():
-        #         if j == k :
-        #             cnt += 1
-    
-    # print(cnt)
+    for i in words:
+        if check_word(cnt, i, begin) == 1:
+            return
     return answer
+
+def check_word (cnt, word, begin):
+    for j in list(word).sort():
+        for k in list(begin).sort():
+            if j == k :
+                cnt += 1
+    return cnt
+
 
 begin = "hit"
 target = "cog"
