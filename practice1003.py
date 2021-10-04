@@ -29,10 +29,8 @@ def solution(tickets):
                     answer.append(i[0])
                     stack.append(i[1])
                     break # 방문을 하고나면 다른도시를 출발점으로 다시 돌아준다.
-            else: 
-                if 0 in visit :
-                    answer.append(dest)
-                else:
+            else: # 이쪽에서 뭔가 문제가 있을 것 같다...
+                if 0 not in visit :
                     answer.append(dest)
                     break
 
