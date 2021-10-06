@@ -8,4 +8,4 @@ def solution(phone_book):
     return answer
 
 # 효율성에서 실패했다.. ㅠㅠ j[0:len(i)]때문이었을까
-# sort함수로 한번 정렬을 해주는 풀이를 보았다.
+# sort함수로 한번 정렬을 해주는 풀이를 보았다. 그래서 그대로 해줌 그랬더니 맞았다.
