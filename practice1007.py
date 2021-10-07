@@ -25,7 +25,7 @@ dy = [0,0,1,-1]
 graph = []
 for _ in range(N):
     graph.append(list(map(int, sys.stdin.readline().rstrip())))
-visit = [[[-1] * 2 for _ in range(M)] for _ in range(N)]
+visit = [[[-1,-1] for _ in range(M)] for _ in range(N)]
 
 
 solution()
