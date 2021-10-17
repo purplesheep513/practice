@@ -10,6 +10,7 @@ for _ in range(K):
     for _ in range(E):
         u,v = map(int,sys.stdin.readline().rstrip().split())
         graph[u].append(v)
+        graph[v].append(u)
 
     def bfs(x):
         queue = deque()
@@ -25,15 +26,16 @@ for _ in range(K):
                     else :
                         visit[i][1] = True
                     queue.append(i)
-                else :
-                    if visit[x][1] == visit[i][1]:
-                        return "NO"
-        return "YES"
 
-    check = ""
+    check = "YES"
     for i in range(V):
         if visit[i][0] == 0:
-            check = bfs(i)
-            if check == "NO":
-                break
+            bfs(i)
+
+    for i in range(len(graph)) :
+        if check == "YES":
+            for j in graph[i]:
+                if visit[i][1] == visit[j][1]:
+                    check = "NO"
+                    break
     print(check)
